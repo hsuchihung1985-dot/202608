@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>嘉義日月潭五日遠征計畫 - 自由之翼行程表</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #1a1917;
+            color: #e5e0d8;
+            background-image: radial-gradient(#2d2a26 1px, transparent 1px);
+            background-size: 16px 16px;
+        }
+
+        .font-titan {
+            font-family: 'Noto Serif TC', serif;
+        }
+
+        .bg-parchment {
+            background-color: #26231f;
+            background-image: linear-gradient(to bottom, #2c2823, #211e1a);
+            border: 1px solid #4a4237;
+        }
+
+        .bg-scout-green {
+            background-color: #1e3a2b;
+        }
+
+        .border-scout-gold {
+            border-color: #8c733e;
+        }
+
+        .text-scout-gold {
+            color: #d4af37;
+        }
+
+        .text-titan-red {
+            color: #a83232;
+        }
+
+        .active-tab {
+            color: #d4af37 !important;
+            border-top: 3px solid #d4af37;
+            background-color: #2a2620;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="pb-24">
+
+    <!-- Header / Top Banner -->
+    <header class="bg-gradient-to-r from-neutral-900 via-stone-900 to-neutral-900 border-b-2 border-scout-gold p-4 sticky top-0 z-50 shadow-2xl">
+        <div class="max-w-md mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-scout-green border-2 border-scout-gold rounded flex items-center justify-center text-scout-gold shadow-inner">
+                    <i class="fa-solid font-titan text-xl">翼</i>
+                </div>
+                <div>
+                    <h1 class="font-titan text-lg font-bold tracking-wider text-stone-100">嘉義·日月潭 遠征檔案</h1>
+                    <p class="text-xs text-stone-400">8/15 - 8/19 ｜ 6大1小 自駕巡旅</p>
+                </div>
+            </div>
+            <div class="bg-red-950/80 border border-red-800 text-red-200 text-xs px-2.5 py-1 rounded-full font-mono">
+                5D4N
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-md mx-auto p-4 space-y-6">
+
+        <!-- TAB 1: 每日行程 (ITINERARY) -->
+        <section id="sec-itinerary" class="tab-content space-y-4">
+            <!-- Day Selector -->
+            <div class="flex overflow-x-auto space-x-2 pb-2 hide-scrollbar">
+                <button onclick="switchDay(1)" id="day-btn-1" class="day-btn flex-none px-4 py-2 rounded bg-stone-800 border border-stone-700 text-sm font-bold text-stone-300 active-day">第1日 8/15</button>
+                <button onclick="switchDay(2)" id="day-btn-2" class="day-btn flex-none px-4 py-2 rounded bg-stone-800 border border-stone-700 text-sm font-bold text-stone-300">第2日 8/16</button>
+                <button onclick="switchDay(3)" id="day-btn-3" class="day-btn flex-none px-4 py-2 rounded bg-stone-800 border border-stone-700 text-sm font-bold text-stone-300">第3日 8/17</button>
+                <button onclick="switchDay(4)" id="day-btn-4" class="day-btn flex-none px-4 py-2 rounded bg-stone-800 border border-stone-700 text-sm font-bold text-stone-300">第4日 8/18</button>
+                <button onclick="switchDay(5)" id="day-btn-5" class="day-btn flex-none px-4 py-2 rounded bg-stone-800 border border-stone-700 text-sm font-bold text-stone-300">第5日 8/19</button>
+            </div>
+
+            <!-- Route Map Overview (Day 1-5 Common) -->
+            <div class="bg-parchment p-3 rounded-lg border border-stone-700 text-xs text-stone-300 flex items-center justify-between">
+                <span class="font-bold text-scout-gold"><i class="fa-solid fa-map-location-dot mr-1"></i> 行軍動線:</span>
+                <span id="route-text">台北 ➔ 嘉義六腳/太保 ➔ 雲登飯店</span>
+            </div>
+
+            <!-- Timeline Content -->
+            <div id="day-content" class="space-y-3">
+                <!-- Dynamic insertion via JavaScript -->
+            </div>
+        </section>
+
+        <!-- TAB 2: 景點指南 (SPOTS) -->
+        <section id="sec-spots" class="tab-content hidden space-y-4">
+            <h2 class="font-titan text-xl text-scout-gold border-b border-stone-700 pb-2 flex items-center">
+                <i class="fa-solid fa-compass mr-2"></i> 遠征據點 (景點)
+            </h2>
+            <div class="space-y-4" id="spots-list">
+                <!-- Dynamic Spots -->
+            </div>
+        </section>
+
+        <!-- TAB 3: 食宿據點 (STATION) -->
+        <section id="sec-stay" class="tab-content hidden space-y-6">
+            <div>
+                <h2 class="font-titan text-xl text-scout-gold border-b border-stone-700 pb-2 mb-3 flex items-center">
+                    <i class="fa-solid fa-campground mr-2"></i> 兵團宿營 (住宿)
+                </h2>
+                <div class="space-y-4" id="hotels-list"></div>
+            </div>
+            <div>
+                <h2 class="font-titan text-xl text-scout-gold border-b border-stone-700 pb-2 mb-3 flex items-center">
+                    <i class="fa-solid fa-utensils mr-2"></i> 補給據點 (美饌)
+                </h2>
+                <div class="space-y-4" id="food-list"></div>
+            </div>
+        </section>
+
+        <!-- TAB 4: 預算資源 (BUDGET) -->
+        <section id="sec-budget" class="tab-content hidden space-y-4">
+            <h2 class="font-titan text-xl text-scout-gold border-b border-stone-700 pb-2 flex items-center">
+                <i class="fa-solid fa-coins mr-2"></i> 軍需預算概算 (TWD)
+            </h2>
+            
+            <div class="bg-parchment p-4 rounded-lg">
+                <canvas id="budgetChart" class="w-full h-48"></canvas>
+            </div>
+
+            <div class="space-y-3" id="budget-details">
+                <!-- Details generated by JS -->
+            </div>
+        </section>
+
+        <!-- TAB 5: 情報與天氣 (INFO) -->
+        <section id="sec-info" class="tab-content hidden space-y-4">
+            <h2 class="font-titan text-xl text-scout-gold border-b border-stone-700 pb-2 flex items-center">
+                <i class="fa-solid fa-scroll mr-2"></i> 戰場情報 (天氣/備忘)
+            </h2>
+
+            <!-- Weather Cards -->
+            <div class="grid grid-cols-1 gap-3">
+                <div class="bg-parchment p-3 rounded-lg border-l-4 border-yellow-500">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="font-bold text-sm text-stone-200">平地區域 (嘉義/市區)</span>
+                        <span class="text-xs bg-yellow-950 text-yellow-300 px-2 py-0.5 rounded">28°C - 34°C</span>
+                    </div>
+                    <p class="text-xs text-stone-400">炎熱酷暑，需做好全面防曬，館內冷氣強烈請帶薄外套。</p>
+                </div>
+
+                <div class="bg-parchment p-3 rounded-lg border-l-4 border-emerald-500">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="font-bold text-sm text-stone-200">高山區域 (阿里山/石棹)</span>
+                        <span class="text-xs bg-emerald-950 text-emerald-300 px-2 py-0.5 rounded">15°C - 22°C</span>
+                    </div>
+                    <p class="text-xs text-stone-400">涼爽舒適但溫差大，午後易有霧氣短雨，請準備洋蔥式穿法與保暖風衣。</p>
+                </div>
+
+                <div class="bg-parchment p-3 rounded-lg border-l-4 border-blue-500">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="font-bold text-sm text-stone-200">湖畔區域 (日月潭/九族)</span>
+                        <span class="text-xs bg-blue-950 text-blue-300 px-2 py-0.5 rounded">22°C - 30°C</span>
+                    </div>
+                    <p class="text-xs text-stone-400">體感舒適，準備泳具（雲品溫泉區）與水上活動配件。</p>
+                </div>
+            </div>
+
+            <div class="bg-parchment p-4 rounded-lg space-y-2 text-xs text-stone-300 border border-stone-700">
+                <h3 class="font-bold text-scout-gold text-sm border-b border-stone-700 pb-1">生存守則 (實用須知)</h3>
+                <ul class="list-disc pl-4 space-y-1">
+                    <li><strong class="text-stone-200">山路駕駛:</strong> 台18線阿里山公路彎道多，長輩與小孩可備暈車藥。</li>
+                    <li><strong class="text-stone-200">博愛設施:</strong> 故宮南院、阿里山小火車/園區木棧道皆有無障礙設計，雙向幼兒車通行暢阻。</li>
+                    <li><strong class="text-stone-200">預約提醒:</strong> Day 3 晚餐「阿宏的家」需於當天早上電話預約告知餐點。</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-stone-950 border-t border-scout-gold/50 shadow-2xl z-50">
+        <div class="max-w-md mx-auto grid grid-cols-5 text-center text-xs text-stone-400">
+            <button onclick="navTo('itinerary')" id="nav-itinerary" class="py-2.5 flex flex-col items-center active-tab">
+                <i class="fa-solid fa-clock-rotate-left text-base mb-1"></i>
+                <span>遠征</span>
+            </button>
+            <button onclick="navTo('spots')" id="nav-spots" class="py-2.5 flex flex-col items-center">
+                <i class="fa-solid fa-map-location text-base mb-1"></i>
+                <span>據點</span>
+            </button>
+            <button onclick="navTo('stay')" id="nav-stay" class="py-2.5 flex flex-col items-center">
+                <i class="fa-solid fa-utensils text-base mb-1"></i>
+                <span>補給</span>
+            </button>
+            <button onclick="navTo('budget')" id="nav-budget" class="py-2.5 flex flex-col items-center">
+                <i class="fa-solid fa-coins text-base mb-1"></i>
+                <span>軍需</span>
+            </button>
+            <button onclick="navTo('info')" id="nav-info" class="py-2.5 flex flex-col items-center">
+                <i class="fa-solid fa-shield-halved text-base mb-1"></i>
+                <span>情報</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- App Data & Scripts -->
+    <script>
+        const itineraryData = {
+            1: {
+                route: "台北 ➔ 嘉義六腳/太保 ➔ 雲登飯店",
+                events: [
+                    { time: "08:30 - 11:30", title: "台北開車出發", desc: "國道南下，途中於西螺服務區休息舒展。" },
+                    { time: "11:30 - 13:00", title: "午餐：客家本色", desc: "交流道附近，大合菜，附設專用停車場。", tag: "食" },
+                    { time: "13:15 - 15:00", title: "蒜頭糖廠蔗埕文化園區", desc: "搭乘 14:00 班次糖鐵五分車前往故宮南院，品嚐台糖冰品。", tag: "景" },
+                    { time: "15:15 - 17:30", title: "故宮南院", desc: "參觀錯別字展、兒童創意園區。無障礙設施完善。", tag: "景" },
+                    { time: "18:00 - 19:30", title: "晚餐：頂六江家火雞肉飯", desc: "中埔交流道附近，周邊停車方便。", tag: "食" },
+                    { time: "20:00", title: "Check-in 雲登景觀飯店", desc: "入住雲登家庭套房*2，欣賞夜景。", tag: "宿" }
+                ]
+            },
+            2: {
+                route: "嘉義市區 ➔ 觸口/逐鹿 ➔ 石棹八號",
+                events: [
+                    { time: "08:30 - 09:30", title: "飯店早餐 & Check-out", desc: "補給能量準備上山。" },
+                    { time: "09:45 - 11:45", title: "嘉大昆蟲館 / 粉牛牧場", desc: "10:00/11:00 導覽摸蛇體驗，溫室花園與餵小牛。", tag: "景" },
+                    { time: "12:00 - 13:30", title: "午餐：噴水火雞肉飯（小雅旗艦店）", desc: "空間寬敞，附大型專用停車場。", tag: "食" },
+                    { time: "14:15 - 15:15", title: "觸口遊客中心 & 逐鹿文創園區", desc: "平路散步、長輩幼兒皆宜。", tag: "景" },
+                    { time: "15:45 - 17:30", title: "石棹步道群", desc: "漫步茶園與杉木林短程平緩步道。", tag: "景" },
+                    { time: "17:45 前", title: "Check-in 石棹八號民宿", desc: "⚠️ 18:30 前回房間/露台欣賞阿里山絕美夕陽！", tag: "宿" },
+                    { time: "18:30 - 20:00", title: "晚餐：街角永富苦茶油雞", desc: "建議外帶回民宿舒適享用。", tag: "食" }
+                ]
+            },
+            3: {
+                route: "石棹 ➔ 阿里山國家森林遊樂區 ➔ 亮晨民宿",
+                events: [
+                    { time: "08:00 - 08:30", title: "早餐 & Check-out", desc: "前往阿里山森林遊樂區。" },
+                    { time: "09:30 - 12:00", title: "阿里山森林遊樂區", desc: "阿里山站➔小火車至沼平站➔天空步道➔姊妹潭➔神木站搭車。", tag: "景" },
+                    { time: "12:15 - 13:45", title: "午餐：山賓餐廳", desc: "商圈內熱門石頭火鍋與高山菜。", tag: "食" },
+                    { time: "14:30 - 16:30", title: "下山前往亮晨民宿", desc: "順沿阿里山公路行駛。" },
+                    { time: "17:00", title: "Check-in 亮晨民宿", desc: "入住 302四人房 + 301雙人房。", tag: "宿" },
+                    { time: "18:00 - 20:00", title: "晚餐：阿宏的家", desc: "特色鍋底與韓式拌飯（⚠️當天早上需電話預訂）。", tag: "食" }
+                ]
+            },
+            4: {
+                route: "亮晨民宿 ➔ 奮起湖 ➔ 日月潭雲品溫泉酒店",
+                events: [
+                    { time: "05:30", title: "房間直擊阿里山日出！", desc: "無需早起趕車，房內直擊晨光。", tag: "景" },
+                    { time: "08:00 - 09:00", title: "早餐 & Check-out", desc: "準備前往奮起湖老街。" },
+                    { time: "09:30 - 11:30", title: "奮起湖老街", desc: "逛鐵道老街，享用甜甜圈、草仔粿。", tag: "景" },
+                    { time: "11:30 - 13:00", title: "午餐：奮起湖鐵路便當", desc: "備選：龍舞雲海高山蔬菜火鍋。", tag: "食" },
+                    { time: "13:00 - 15:30", title: "車程前往日月潭", desc: "經台21線新中橫公路。" },
+                    { time: "15:30 前", title: "Check-in 日月潭雲品溫泉酒店", desc: "尊榮山景家庭房，享受泡湯與兒童親水區。", tag: "宿" },
+                    { time: "18:00 - 20:30", title: "晚餐：雲品 丹彤自助晚餐", desc: "頂級百匯享用。", tag: "食" }
+                ]
+            },
+            5: {
+                route: "雲品酒店 ➔ 九族文化村 ➔ 賦歸台北",
+                events: [
+                    { time: "07:30 - 09:00", title: "雲品丹彤自助早餐", desc: "享受湖畔早餐時間。" },
+                    { time: "10:00 - 15:30", title: "九族文化村 & 日月潭纜車", desc: "搭乘纜車俯瞰湖景，走訪原住民部落展演與幼兒遊樂設施。", tag: "景" },
+                    { time: "12:30", title: "園區午餐", desc: "金礦山餐廳或原住民竹筒飯/烤肉。", tag: "食" },
+                    { time: "15:30 - 19:30", title: "賦歸台北", desc: "滿載美好回憶順利返家！" }
+                ]
+            }
+        };
+
+        const spotsData = [
+            { name: "蒜頭糖廠蔗埕文化園區", desc: "搭乘藍皮五分車，體驗鐵道風情與古早味紅豆冰。", map: "https://maps.google.com/?q=蒜頭糖廠蔗埕文化園區" },
+            { name: "國立故宮南部院區", desc: "兒童創意園區、展覽與水岸風景，雙向推車暢行無阻。", map: "https://maps.google.com/?q=國立故宮博物院南部院區" },
+            { name: "嘉大昆蟲館 & 粉牛牧場", desc: "溫室花園、導覽摸蛇體驗與親手餵小牛。", map: "https://maps.google.com/?q=嘉大昆蟲館" },
+            { name: "阿里山國家森林遊樂區", desc: "復古小火車、神木群步道與無障礙空中木棧道。", map: "https://maps.google.com/?q=阿里山國家森林遊樂區" },
+            { name: "奮起湖老街", desc: "南台灣九份，經典鐵路便當與檜木甜甜圈。", map: "https://maps.google.com/?q=奮起湖老街" },
+            { name: "九族文化村", desc: "纜車高空湖景、原住民文化展演與溫和幼兒遊樂區。", map: "https://maps.google.com/?q=九族文化村" }
+        ];
+
+        const hotelsData = [
+            { name: "嘉義雲登景觀飯店", desc: "房型: 雲登家庭套房*2 ｜ 俯瞰嘉義夜景", map: "https://maps.google.com/?q=雲登景觀飯店" },
+            { name: "嘉義竹崎石棹八號", desc: "房型: 雲景四人房*1 + 雲景雙人房*1 ｜ 露台絕美夕陽", map: "https://maps.google.com/?q=石棹八號" },
+            { name: "阿里山亮晨民宿", desc: "房型: 302日出四人房 + 301晴畫雙人房 ｜ 房間直擊日出", map: "https://maps.google.com/?q=亮晨民宿" },
+            { name: "日月潭雲品溫泉酒店", desc: "房型: 尊榮山景家庭房 ｜ 頂級溫泉與親水設施", map: "https://maps.google.com/?q=日月潭雲品溫泉酒店" }
+        ];
+
+        const foodData = [
+            { name: "客家本色 (交流道店)", desc: "合菜美味，附專用停車場", map: "https://maps.google.com/?q=客家本色" },
+            { name: "頂六江家火雞肉飯", desc: "古早味火雞肉飯，停車便利", map: "https://maps.google.com/?q=頂六江家火雞肉飯" },
+            { name: "噴水火雞肉飯 (小雅旗艦店)", desc: "寬敞明亮，附大型停車場", map: "https://maps.google.com/?q=噴水火雞肉飯小雅旗艦店" },
+            { name: "街角永富苦茶油雞", desc: "招牌苦茶油雞，適合外帶", map: "https://maps.google.com/?q=街角永富苦茶油雞" },
+            { name: "山賓餐廳", desc: "阿里山商圈石頭火鍋熱門店", map: "https://maps.google.com/?q=山宾餐廳" },
+            { name: "阿宏的家", desc: "火鍋+韓式拌飯 (需當晨預約)", map: "https://maps.google.com/?q=阿宏的家" },
+            { name: "雲品 丹彤自助餐廳", desc: "頂級百匯吃到飽", map: "https://maps.google.com/?q=雲品溫泉酒店丹彤" }
+        ];
+
+        const budgetData = [
+            { day: "D1 嘉義文化", cost: 4600, detail: "故宮$600 + 五分車$1000 + 餐費$3000" },
+            { day: "D2 生態夕陽", cost: 4500, detail: "昆蟲館$920 + 餐費$3600" },
+            { day: "D3 阿里山", cost: 5500, detail: "門票$820 + 小火車$600 + 餐費$4000" },
+            { day: "D4 日月潭", cost: 2500, detail: "奮起湖小吃與午餐$2500 (飯店含一泊二食)" },
+            { day: "D5 九族纜車", cost: 7800, detail: "門票$5270 + 園區午餐/伴手禮$2500" }
+        ];
+
+        // Global Active Day
+        let currentDay = 1;
+
+        function switchDay(day) {
+            currentDay = day;
+            document.querySelectorAll('.day-btn').forEach((btn, idx) => {
+                if (idx + 1 === day) {
+                    btn.classList.add('bg-scout-green', 'text-scout-gold', 'border-scout-gold');
+                    btn.classList.remove('bg-stone-800', 'text-stone-300');
+                } else {
+                    btn.classList.remove('bg-scout-green', 'text-scout-gold', 'border-scout-gold');
+                    btn.classList.add('bg-stone-800', 'text-stone-300');
+                }
+            });
+
+            const data = itineraryData[day];
+            document.getElementById('route-text').innerText = data.route;
+
+            const container = document.getElementById('day-content');
+            container.innerHTML = '';
+
+            data.events.forEach(item => {
+                let tagBadge = '';
+                if (item.tag === '食') tagBadge = '<span class="bg-amber-950 text-amber-300 text-xs px-2 py-0.5 rounded border border-amber-800">美饌</span>';
+                if (item.tag === '景') tagBadge = '<span class="bg-emerald-950 text-emerald-300 text-xs px-2 py-0.5 rounded border border-emerald-800">據點</span>';
+                if (item.tag === '宿') tagBadge = '<span class="bg-indigo-950 text-indigo-300 text-xs px-2 py-0.5 rounded border border-indigo-800">宿營</span>';
+
+                container.innerHTML += `
+                    <div class="bg-parchment p-3.5 rounded-lg border-l-4 border-scout-gold space-y-1">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-mono text-scout-gold font-bold">${item.time}</span>
+                            ${tagBadge}
+                        </div>
+                        <h4 class="font-bold text-stone-100">${item.title}</h4>
+                        <p class="text-xs text-stone-400">${item.desc}</p>
+                    </div>
+                `;
+            });
+        }
+
+        function navTo(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('nav button').forEach(el => el.classList.remove('active-tab'));
+
+            document.getElementById(`sec-${tab}`).classList.remove('hidden');
+            document.getElementById(`nav-${tab}`).classList.add('active-tab');
+
+            if (tab === 'budget') renderChart();
+        }
+
+        function renderLists() {
+            // Spots
+            const spotsContainer = document.getElementById('spots-list');
+            spotsData.forEach(spot => {
+                spotsContainer.innerHTML += `
+                    <div class="bg-parchment p-4 rounded-lg border border-stone-700 space-y-2">
+                        <h3 class="font-bold text-base text-stone-100">${spot.name}</h3>
+                        <p class="text-xs text-stone-400">${spot.desc}</p>
+                        <a href="${spot.map}" target="_blank" class="inline-flex items-center text-xs bg-scout-green border border-scout-gold text-scout-gold px-3 py-1.5 rounded hover:bg-stone-800">
+                            <i class="fa-solid fa-location-arrow mr-1.5"></i> 開啟地圖導航
+                        </a>
+                    </div>
+                `;
+            });
+
+            // Hotels
+            const hotelsContainer = document.getElementById('hotels-list');
+            hotelsData.forEach(item => {
+                hotelsContainer.innerHTML += `
+                    <div class="bg-parchment p-3.5 rounded-lg border-l-4 border-indigo-500 space-y-1.5">
+                        <h4 class="font-bold text-stone-200">${item.name}</h4>
+                        <p class="text-xs text-stone-400">${item.desc}</p>
+                        <a href="${item.map}" target="_blank" class="inline-block text-xs text-scout-gold underline mt-1">
+                            <i class="fa-solid fa-map-pin mr-1"></i> Google Map 連結
+                        </a>
+                    </div>
+                `;
+            });
+
+            // Foods
+            const foodContainer = document.getElementById('food-list');
+            foodData.forEach(item => {
+                foodContainer.innerHTML += `
+                    <div class="bg-parchment p-3.5 rounded-lg border-l-4 border-amber-500 space-y-1.5">
+                        <h4 class="font-bold text-stone-200">${item.name}</h4>
+                        <p class="text-xs text-stone-400">${item.desc}</p>
+                        <a href="${item.map}" target="_blank" class="inline-block text-xs text-scout-gold underline mt-1">
+                            <i class="fa-solid fa-map-pin mr-1"></i> Google Map 連結
+                        </a>
+                    </div>
+                `;
+            });
+
+            // Budget Details
+            const budgetDetails = document.getElementById('budget-details');
+            budgetData.forEach(b => {
+                budgetDetails.innerHTML += `
+                    <div class="bg-parchment p-3 rounded-lg border border-stone-700 flex justify-between items-center">
+                        <div>
+                            <div class="font-bold text-sm text-stone-200">${b.day}</div>
+                            <div class="text-xs text-stone-400">${b.detail}</div>
+                        </div>
+                        <div class="font-mono text-scout-gold font-bold text-sm">~$${b.cost}</div>
+                    </div>
+                `;
+            });
+        }
+
+        let chartInstance = null;
+        function renderChart() {
+            if (chartInstance) return;
+            const ctx = document.getElementById('budgetChart').getContext('2d');
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: budgetData.map(b => b.day.split(' ')[0]),
+                    datasets: [{
+                        label: '每日估算花費 (TWD)',
+                        data: budgetData.map(b => b.cost),
+                        backgroundColor: '#8c733e',
+                        borderColor: '#d4af37',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            ticks: { color: '#a8a29e' },
+                            grid: { color: '#332f2b' }
+                        },
+                        x: {
+                            ticks: { color: '#a8a29e' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize App
+        window.onload = () => {
+            switchDay(1);
+            renderLists();
+        };
+    </script>
+</body>
+</html>
